@@ -1,48 +1,51 @@
 const sql = require("./data-access-object/dao");
 
-const getOptions = async () => {
+const getAnneeScholaires = async () => {
   try {
-    const [rows] = await sql.query("SELECT*FROM options");
+    const [rows] = await sql.query("SELECT*FROM annee_scholaires");
     return rows;
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const getOption = async (id) => {
+const getAnneeScholaire = async (id) => {
   try {
-    const user = await sql.query("SELECT * FROM options WHERE id=?", [id]);
+    const user = await sql.query("SELECT * FROM annee_scholaires WHERE id=?", [
+      id,
+    ]);
     return user[0];
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const addOption = async (name) => {
+const addAnneeScholaire = async (name) => {
   try {
     const result = await sql.query(
       `
-          INSERT INTO options(name)
+          INSERT INTO annee_scholaires(name)
           VALUE(?);
       `,
       [name]
     );
     const id = result[0].insertId;
-    const user = await getOption(id);
+    const user = await getAnneeScholaire(id);
     return user;
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const deleteOption = async (id) => {
+const deleteAnneeScholaire = async (id) => {
   try {
-    const Option = await getOption(id);
+    const AnneeScholaire = await getAnneeScholaire(id);
 
-    if (!Option.length) return { status: 404, message: "Object innéxistant" };
+    if (!AnneeScholaire.length)
+      return { status: 404, message: "Object innéxistant" };
     const result = await sql.query(
       `
-      DELETE FROM options
+      DELETE FROM annee_scholaires
       WHERE id=?
       `,
       [id]
@@ -54,8 +57,8 @@ const deleteOption = async (id) => {
 };
 
 module.exports = {
-  getOptions,
-  addOption,
-  getOption,
-  deleteOption,
+  getAnneeScholaires,
+  addAnneeScholaire,
+  getAnneeScholaire,
+  deleteAnneeScholaire,
 };

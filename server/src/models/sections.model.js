@@ -1,15 +1,4 @@
-const mysql = require("mysql2");
-require("dotenv").config();
-
-// Create a connection to the database
-const sql = mysql
-  .createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-  })
-  .promise();
+const sql = require("./data-access-object/dao");
 
 const getSections = async () => {
   try {

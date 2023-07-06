@@ -1,48 +1,48 @@
 const sql = require("./data-access-object/dao");
 
-const getOptions = async () => {
+const getAnnees = async () => {
   try {
-    const [rows] = await sql.query("SELECT*FROM options");
+    const [rows] = await sql.query("SELECT*FROM annees");
     return rows;
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const getOption = async (id) => {
+const getAnnee = async (id) => {
   try {
-    const user = await sql.query("SELECT * FROM options WHERE id=?", [id]);
+    const user = await sql.query("SELECT * FROM annees WHERE id=?", [id]);
     return user[0];
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const addOption = async (name) => {
+const addAnnee = async (name) => {
   try {
     const result = await sql.query(
       `
-          INSERT INTO options(name)
+          INSERT INTO annees(name)
           VALUE(?);
       `,
       [name]
     );
     const id = result[0].insertId;
-    const user = await getOption(id);
+    const user = await getAnnee(id);
     return user;
   } catch (error) {
     return { status: 400, message: error.message };
   }
 };
 
-const deleteOption = async (id) => {
+const deleteAnnee = async (id) => {
   try {
-    const Option = await getOption(id);
+    const Annee = await getAnnee(id);
 
-    if (!Option.length) return { status: 404, message: "Object innéxistant" };
+    if (!Annee.length) return { status: 404, message: "Object innéxistant" };
     const result = await sql.query(
       `
-      DELETE FROM options
+      DELETE FROM annees
       WHERE id=?
       `,
       [id]
@@ -54,8 +54,8 @@ const deleteOption = async (id) => {
 };
 
 module.exports = {
-  getOptions,
-  addOption,
-  getOption,
-  deleteOption,
+  getAnnees,
+  addAnnee,
+  getAnnee,
+  deleteAnnee,
 };
