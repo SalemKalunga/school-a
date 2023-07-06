@@ -10,6 +10,7 @@ const OptionsRouter = require("./routes/options/options.route");
 const ClassesRouter = require("./routes/classes/classes.route");
 const AnneesRouter = require("./routes/annees/annees.route");
 const AnneeScholairesRouter = require("./routes/annee_scholaires/annee-scholaires.route");
+const ElevesRouter = require("./routes/eleves/eleves.route");
 require("dotenv").config();
 
 app.use(
@@ -29,6 +30,7 @@ app.use("/options", OptionsRouter);
 app.use("/classes", ClassesRouter);
 app.use("/annees", AnneesRouter);
 app.use("/annee-scholaires", AnneeScholairesRouter);
+app.use("/eleves", ElevesRouter);
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 8000;
