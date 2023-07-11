@@ -3,9 +3,21 @@ const sql = require("./data-access-object/dao");
 const getEleves = async () => {
   try {
     const [rows] = await sql.query(
-      "SELECT el.id,el.matricule,el.nom,el.postnom,el.prenom,el.date_de_naissance,el.genre,el.lieu_de_naissance,el.adresse,el.nom_du_responsable,el.telephone_du_responsable,el.idAnneeScholaire,asco.name as annee_scholaire,el.idClasse,cl.name as classe,el.idOption,opt.name as option,el.idSection,sec.name as section,el.photo,el.est_confirmee,el.a_abandonnee,el.date_creation FROM eleves el JOIN annee_scholaires asco ON el.idAnneeScholaire = asco.id JOIN classes cl ON el.idClasse = cl.id JOIN options opt ON el.idOption = opt.id JOIN sections sec ON el.idSection = sec.id;"
+      "SELECT el.id,el.matricule,el.nom,el.postnom,el.prenom,el.date_de_naissance,el.genre,el.lieu_de_naissance,el.adresse,el.nom_du_responsable,el.telephone_du_responsable,el.idAnneeScholaire,asco.name as annee_scholaire,el.idClasse,cl.name as classe,el.idOption,opt.name as option,el.idSection,sec.name as section,el.photo,el.est_confirmee,el.a_abandonnee,el.date_creation,ann.name as annee FROM eleves el JOIN annee_scholaires asco ON el.idAnneeScholaire = asco.id JOIN classes cl ON el.idClasse = cl.id JOIN options opt ON el.idOption = opt.id JOIN sections sec ON el.idSection = sec.id JOIN annees ann on el.idAnnee = ann.id;"
     );
-    return rows;
+    const result = [];
+    rows.forEach((row) => {
+      const date = row.date_de_naissance;
+      const date_b = row.date_creation;
+      const obj = {
+        ...row,
+        date_de_naissance: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+        date_creation: `${date_b.getFullYear()}-${date_b.getMonth()}-${date_b.getDate()}`,
+      };
+      result.push(obj);
+    });
+
+    return result;
   } catch (error) {
     return { status: 400, message: error.message };
   }
@@ -35,6 +47,17 @@ const updateMatriculeEleve = async (matricule, id) => {
     return { status: 400, message: error.message };
   }
 };
+
+const confirmeeEleve = async (id) => {
+  try {
+    await sql.query("UPDATE eleves SET est_confirmee = 1 WHERE id=?;", [id]);
+    const user = await getEleveById(id);
+    return user[0];
+  } catch (error) {
+    return { status: 400, message: error.message };
+  }
+};
+
 const addEleve = async (obj) => {
   const {
     nom,
@@ -140,4 +163,5 @@ module.exports = {
   addEleve,
   getEleveById,
   deleteEleve,
+  confirmeeEleve,
 };

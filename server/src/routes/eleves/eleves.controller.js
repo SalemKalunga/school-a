@@ -3,6 +3,7 @@ const {
   addEleve,
   deleteEleve,
   getEleveById,
+  confirmeeEleve,
 } = require("../../models/eleves.model");
 
 const httpGetEleves = async (req, res) => {
@@ -75,10 +76,18 @@ const httpDeleteEleve = async (req, res) => {
   if (status !== 200) return res.status(status).json({ message });
   return res.status(200).json({ message });
 };
-
+const httpConfirmeeEleve = async (req, res) => {
+  const id = Number(req.params.id);
+  const data = await confirmeeEleve(id);
+  if (data.status) {
+    return res.status(data.status).json(data);
+  }
+  res.status(202).json(data);
+};
 module.exports = {
   httpGetEleves,
   httpAddEleve,
   httpGetEleveById,
   httpDeleteEleve,
+  httpConfirmeeEleve,
 };

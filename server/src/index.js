@@ -2,7 +2,7 @@ const http = require("http");
 
 const express = require("express");
 const app = express();
-
+const bcrypt = require("bcrypt");
 const cors = require("cors");
 const path = require("path");
 const sectionsRouter = require("./routes/sections/sections.route");
@@ -20,9 +20,13 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+app.get("/", async (req, res) => {
+  // const password = "123user";
+  // const hashed = await bcrypt.hash(password, 13);
+  // const isMatch = await bcrypt.compare(password, hashed);
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
 app.use("/sections", sectionsRouter);
